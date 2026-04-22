@@ -1,8 +1,8 @@
 import styled from "styled-components";
 
 const StyledFooter = styled.footer`
-    margin-left: 15vw;
-    margin-right: 15vw;
+    margin-left: 20vw;
+    margin-right: 20vw;
     text-align: left;
     font-family: Calibri, Arial, sans-serif;
     font-style: italic;
