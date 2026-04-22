@@ -77,7 +77,7 @@ export default function Home() {
     <StyledMain>
       <StyledH2>50 States</StyledH2>
       <StyledTimerBox>
-        <StyledTimer>0:00</StyledTimer>
+        <StyledTimer>0/50 0:00</StyledTimer>
         <StyledStartStop type="button" value="Begin" id="startstop"/>
       </StyledTimerBox>
       <br/>

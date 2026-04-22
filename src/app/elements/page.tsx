@@ -77,7 +77,7 @@ export default function Home() {
     <StyledMain>
       <StyledH2>First 18 Elements</StyledH2>
       <StyledTimerBox>
-        <StyledTimer>0:00</StyledTimer>
+        <StyledTimer>0/18 0:00</StyledTimer>
         <StyledStartStop type="button" value="Begin" id="startstop"/>
       </StyledTimerBox>
       <br/>

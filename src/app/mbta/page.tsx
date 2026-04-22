@@ -76,7 +76,7 @@ export default function Home() {
     <StyledMain>
       <StyledH2>B Branch Stations</StyledH2>
       <StyledTimerBox>
-        <StyledTimer>0:00</StyledTimer>
+        <StyledTimer>0/23 0:00</StyledTimer>
         <StyledStartStop type="button" value="Begin" id="startstop"/>
       </StyledTimerBox>
       <br/>
