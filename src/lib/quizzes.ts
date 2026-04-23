@@ -25,11 +25,11 @@ export const quizzes: Quiz[] = [
         id: "mbta-b-branch",
         title: 'MBTA "B" Branch Stations',
         answers: [
-            "Boston College", "South St", "Chestnut Hill Ave", "Chiswick Rd", "Sutherland Rd",
-            "Washington St", "Warren St", "Allston St", "Griggs St", "Harvard Ave",
-            "Packard's Corner", "Babcock St", "Amory St", "BU Central", "BU East",
-            "Blandford St", "Kenmore", "Hynes", "Copley", "Arlington",
-            "Boylston", "Park St", "Gov't Center"
+            "Boston College", "South Street", "Chestnut Hill Avenue", "Chiswick Road", "Sutherland Road",
+            "Washington Street", "Warren Street", "Allston Street", "Griggs Street", "Harvard Avenue",
+            "Packard's Corner", "Babcock Street", "Amory Street", "Boston University Central", "Boston University East",
+            "Blandford Street", "Kenmore", "Hynes Convention Center", "Copley", "Arlington",
+            "Boylston", "Park Street", "Government Center"
         ],
     },
     {
