@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import Leaderboard from "@/components/Leaderboard";
 import type { Metadata } from 'next'
 
 const StyledMain = styled.main`
@@ -159,7 +160,7 @@ export default function Home() {
         </StyledTr>
       </StyledTable>
       <br/><br/>
-      <StyledH2>Leaderboard</StyledH2>
+      <Leaderboard quizId="us-states" />
     </StyledMain> 
   );
 }
