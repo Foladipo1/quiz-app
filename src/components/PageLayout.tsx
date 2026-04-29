@@ -1,3 +1,12 @@
+/*
+ * src/components/PageLayout.tsx
+ * Mofolaoluwarera Oladipo (foladipo@bu.edu)
+ *
+ * Client component that provides a shared flex layout for quiz pages.
+ * Marked "use client" because styled-components requires a browser
+ * environment to generate CSS class names at runtime.
+ */
+
 "use client";
 
 import styled from "styled-components";
