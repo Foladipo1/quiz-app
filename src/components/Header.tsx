@@ -1,10 +1,11 @@
-"use client";
+// This component was written by Coltrane
 
 import styled from "styled-components";
 import Link from "next/link";
 
 const StyledHeader = styled.header`
-    width: 100%;
+    margin: auto;
+    width: 80vw;
     background: linear-gradient(to right, #7b7bef, #9999ff);
     font-family: Calibri, Arial, sans-serif;
     padding: 1rem 4rem;
@@ -52,6 +53,8 @@ const StyledLink = styled(Link)`
 
 export default function Header() {
     return (
+        // Simple header with navigation. Perhaps the navigation makes the
+        // homepage redundant, but it is good to have a user landing page.
         <StyledHeader>
             <StyledH1>Untitled Quiz Website</StyledH1>
             <StyledH3>by Berry Chen, Coltrane Margosian, and Fola Oladipupo</StyledH3>
@@ -59,7 +62,7 @@ export default function Header() {
                 <StyledLink href="/">Home</StyledLink>
                 <StyledLink href="/50states">50 States</StyledLink>
                 <StyledLink href="/mbta">B Branch Stations</StyledLink>
-                <StyledLink href="/elements">First 18 Elements</StyledLink>
+                <StyledLink href="/elements">First 20 Elements</StyledLink>
             </StyledNav>
         </StyledHeader>
     );

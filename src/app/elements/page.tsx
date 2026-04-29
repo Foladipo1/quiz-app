@@ -1,3 +1,6 @@
+// This page is very simple, simply containing the basic page layout and
+// the data for the quiz. All three quiz pages are more or less the same.
+
 import type { Metadata } from "next";
 import QuizGame from "@/components/QuizGame";
 import Leaderboard from "@/components/Leaderboard";

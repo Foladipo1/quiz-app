@@ -409,6 +409,13 @@
     
                 <StyledHint>
                     Answers are checked without case sensitivity.
+
+                    {/* Conditional hints added by Coltrane */}
+                    {quizId === "mbta-b-branch" ?
+                    " All answers should be fully written out with no abbreviations." : ""}
+                    {quizId === "first-20-elements" ?
+                    " All answers should be written in American English." : ""}
+
                 </StyledHint>
     
                 <StyledMessage $type={messageType}>

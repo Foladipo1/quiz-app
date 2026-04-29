@@ -1,9 +1,10 @@
-"use client";
+// This component was written by Coltrane
 
 import styled from "styled-components";
 
 const StyledFooter = styled.footer`
-    width: 100%;
+    margin: auto;
+    width: 80vw;
     background: linear-gradient(to right, #7b7bef, #9999ff);
     font-family: Calibri, Arial, sans-serif;
     padding: 1rem 4rem;
@@ -20,6 +21,8 @@ const StyledP = styled.p`
 
 export default function Footer() {
     return (
+
+        // Simple footer with copyright statement
         <StyledFooter>
             <StyledP>&copy; Chen, Margosian, Oladipupo 2026. All rights reserved.</StyledP>
         </StyledFooter>

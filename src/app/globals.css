@@ -1,10 +1,13 @@
-/* @import "tailwindcss"; */
+/* This stylesheet was written by Coltrane */
 
+
+/* This styling is recommended of all websites as we have discussed. */
 * {
   margin: 0;
   box-sizing: border-box;
 }
 
+/* Very basic styling to maintain a consistent background and font. */
 body {
   background: #ccccff;
   color: black;
