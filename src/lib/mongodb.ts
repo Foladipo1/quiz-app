@@ -1,3 +1,11 @@
+/*
+ * src/lib/mongodb.ts
+ * Mofolaoluwarera Oladipo (foladipo@bu.edu)
+ *
+ * MongoDB client singleton for Next.js. Reuses a single MongoClient
+ * instance across requests to avoid exhausting Atlas connection limits.
+ */
+
 import { MongoClient } from "mongodb";
 
 const uri = process.env.MONGODB_URI as string;
@@ -15,6 +23,7 @@ declare global {
 }
 
 if (process.env.NODE_ENV === "development") {
+    /* cache the client on the global object  */
     if (!global._mongoClientPromise) {
         client = new MongoClient(uri, options);
         global._mongoClientPromise = client.connect();

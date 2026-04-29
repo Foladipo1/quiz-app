@@ -1,9 +1,17 @@
+/*
+ * src/lib/quizzes.ts
+ * Mofolaoluwarera Oladipo (foladipo@bu.edu)
+ *
+ * Static quiz data for the application.
+ */
+
 export type Quiz = {
     id: string;
     title: string;
     answers: string[];
 };
 
+/* All available quizzes we can add new quizzes here to extend the app */
 export const quizzes: Quiz[] = [
     {
         id: "us-states",
@@ -39,11 +47,12 @@ export const quizzes: Quiz[] = [
             "Hydrogen", "Helium", "Lithium", "Beryllium", "Boron",
             "Carbon", "Nitrogen", "Oxygen", "Fluorine", "Neon",
             "Sodium", "Magnesium", "Aluminum", "Silicon", "Phosphorus",
-            "Sulfur", "Chlorine", "Argon","Potassium", "Calcium"
+            "Sulfur", "Chlorine", "Argon", "Potassium", "Calcium"
         ],
     },
 ];
 
+/* Looks up a quiz by its id*/
 export function getQuizById(id: string): Quiz | undefined {
     return quizzes.find((q) => q.id === id);
 }

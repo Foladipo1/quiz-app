@@ -1,3 +1,12 @@
+/*
+ * src/components/NameEntry.tsx
+ * Mofolaoluwarera Oladipo (foladipo@bu.edu)
+ *
+ * Client component that renders a modal prompting the user to enter
+ * their name after achieving a qualifying leaderboard score.
+ *
+ */
+
 "use client";
 
 import { useState } from "react";
@@ -79,6 +88,7 @@ const ErrorText = styled.p`
     font-size: 0.875rem;
 `;
 
+/* Converts raw seconds to M:SS display format */
 function formatTime(seconds: number): string {
     const m = Math.floor(seconds / 60);
     const s = seconds % 60;
@@ -91,12 +101,15 @@ export default function NameEntryModal({ quizId, score, time, onClose, onSubmitt
     const [loading, setLoading] = useState(false);
 
     async function handleSubmit() {
+        /* Prevent empty name submissions before hitting the server */
         if (!name.trim()) {
             setError("Please enter your name.");
             return;
         }
 
         setLoading(true);
+
+        /* Call server action to validate and persist score to MongoDB */
         const { error } = await submitScore(quizId, name.trim(), score, time);
 
         if (error) {
@@ -105,6 +118,7 @@ export default function NameEntryModal({ quizId, score, time, onClose, onSubmitt
             return;
         }
 
+        /* Trigger leaderboard refresh then close modal on success */
         onSubmitted();
         onClose();
     }
@@ -125,6 +139,7 @@ export default function NameEntryModal({ quizId, score, time, onClose, onSubmitt
                 />
                 {error && <ErrorText>{error}</ErrorText>}
                 <ButtonRow>
+                    {/* Skip closes modal without submitting */}
                     <Button onClick={onClose}>Skip</Button>
                     <Button primary onClick={handleSubmit} disabled={loading}>
                         {loading ? "Submitting..." : "Submit"}

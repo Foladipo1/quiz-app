@@ -1,3 +1,13 @@
+/*
+ * src/components/LeaderboardView.tsx
+ * Mofolaoluwarera Oladipo
+ *
+ * Client component responsible for rendering the leaderboard table.
+ * Marked "use client" because styled-components requires a browser
+ * environment to generate and inject CSS class names at runtime.
+ *
+ */
+
 "use client";
 
 import styled from "styled-components";
