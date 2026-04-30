@@ -15,11 +15,13 @@ This component handles the quiz logic for:
 - revealing the correct table cell when a correct answer is submitted
 - tracking score and elapsed time
 - showing the remaining answers if the user does not finish the quiz
+- opening the leaderboard name-entry modal after normal completion
 */
 
 import { useEffect, useMemo, useState } from "react";
 import styled from "styled-components";
 import { getQuizById } from "@/lib/quizzes";
+import NameEntryModal from "@/components/NameEntry";
 
 const StyledMain = styled.main`
     text-align: center;
@@ -269,14 +271,14 @@ export default function QuizGame({ quizId, title, grid }: QuizGameProps) {
     const [message, setMessage] = useState("Click Begin to start the quiz.");
     const [messageType, setMessageType] = useState<MessageType>("neutral");
     const [answersRevealedAtEnd, setAnswersRevealedAtEnd] = useState(false);
+    const [showNameEntry, setShowNameEntry] = useState(false);
+    const [leaderboardRefreshKey, setLeaderboardRefreshKey] = useState(0);
 
     const totalAnswers = quiz?.answers.length ?? 0;
 
     const answerLookup = useMemo(() => {
         const lookup = new Map<string, string>();
 
-        // Build a lookup table using normalized answers
-        // so the user does not need exact capitalization.
         if (quiz) {
             for (const answer of quiz.answers) {
                 lookup.set(normalizeAnswer(answer), answer);
@@ -287,7 +289,6 @@ export default function QuizGame({ quizId, title, grid }: QuizGameProps) {
     }, [quiz]);
 
     useEffect(() => {
-        // Run the timer only while the quiz is active.
         if (!started || revealedAnswers.length === totalAnswers) {
             return;
         }
@@ -309,13 +310,12 @@ export default function QuizGame({ quizId, title, grid }: QuizGameProps) {
     }
 
     function handleStartReset() {
-        // Before the quiz starts, the button begins the game.
-        // After that, it works as a reset button.
         if (!started && revealedAnswers.length === 0 && seconds === 0) {
             setStarted(true);
             setMessage("Quiz started. Type an answer and press Submit.");
             setMessageType("neutral");
             setAnswersRevealedAtEnd(false);
+            setShowNameEntry(false);
             return;
         }
 
@@ -326,6 +326,7 @@ export default function QuizGame({ quizId, title, grid }: QuizGameProps) {
         setMessage("Quiz reset. Click Begin to start again.");
         setMessageType("neutral");
         setAnswersRevealedAtEnd(false);
+        setShowNameEntry(false);
     }
 
     function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -361,7 +362,6 @@ export default function QuizGame({ quizId, title, grid }: QuizGameProps) {
             return;
         }
 
-        // Add the newly found correct answer to the revealed list.
         const updatedAnswers = [...revealedAnswers, matchedAnswer];
         setRevealedAnswers(updatedAnswers);
         setInputValue("");
@@ -373,106 +373,122 @@ export default function QuizGame({ quizId, title, grid }: QuizGameProps) {
             setStarted(false);
             setMessage(`Finished! Final time: ${formatTime(seconds)}`);
             setMessageType("success");
+            setShowNameEntry(true);
         }
     }
 
     function handleRevealRemainingAnswers() {
-        // If quiz data somehow does not exist, do nothing.
         if (!quiz) {
             return;
         }
 
-        // If the user does not finish the quiz, this reveals
-        // all remaining answers and ends the round.
         setStarted(false);
         setInputValue("");
         setRevealedAnswers(quiz.answers);
         setAnswersRevealedAtEnd(true);
+        setShowNameEntry(false);
         setMessage(`Quiz ended. Remaining answers have been revealed. Final time: ${formatTime(seconds)}`);
         setMessageType("neutral");
+    }
+
+    function handleSubmitted() {
+        setLeaderboardRefreshKey((prev) => prev + 1);
     }
 
     const canRevealRemainingAnswers =
         started && totalAnswers > 0 && revealedAnswers.length < totalAnswers;
 
     return (
-        <StyledMain>
-            <StyledH2>{title}</StyledH2>
+        <>
+            <StyledMain>
+                <StyledH2>{title}</StyledH2>
 
-            <StyledTopCard>
-                <StyledTimerBox>
-                    <StyledStats>
-                        <StyledStatPill>
-                            Score: {revealedAnswers.length}/{totalAnswers}
-                        </StyledStatPill>
-                        <StyledStatPill>
-                            Time: {formatTime(seconds)}
-                        </StyledStatPill>
-                    </StyledStats>
+                <StyledTopCard>
+                    <StyledTimerBox>
+                        <StyledStats>
+                            <StyledStatPill>
+                                Score: {revealedAnswers.length}/{totalAnswers}
+                            </StyledStatPill>
+                            <StyledStatPill>
+                                Time: {formatTime(seconds)}
+                            </StyledStatPill>
+                        </StyledStats>
 
-                    <StyledButtonGroup>
-                        <StyledStartStop type="button" onClick={handleStartReset}>
-                            {!started && revealedAnswers.length === 0 && seconds === 0 ? "Begin" : "Reset"}
-                        </StyledStartStop>
+                        <StyledButtonGroup>
+                            <StyledStartStop type="button" onClick={handleStartReset}>
+                                {!started && revealedAnswers.length === 0 && seconds === 0 ? "Begin" : "Reset"}
+                            </StyledStartStop>
 
-                        {canRevealRemainingAnswers && (
-                            <StyledRevealButton
-                                type="button"
-                                onClick={handleRevealRemainingAnswers}
-                            >
-                                Show Remaining Answers
-                            </StyledRevealButton>
-                        )}
-                    </StyledButtonGroup>
-                </StyledTimerBox>
-            </StyledTopCard>
+                            {canRevealRemainingAnswers && (
+                                <StyledRevealButton
+                                    type="button"
+                                    onClick={handleRevealRemainingAnswers}
+                                >
+                                    Show Remaining Answers
+                                </StyledRevealButton>
+                            )}
+                        </StyledButtonGroup>
+                    </StyledTimerBox>
+                </StyledTopCard>
 
-            <StyledInputContainer onSubmit={handleSubmit}>
-                <StyledTextbox
-                    type="text"
-                    value={inputValue}
-                    onChange={(e) => setInputValue(e.target.value)}
-                    placeholder="Type an answer here"
+                <StyledInputContainer onSubmit={handleSubmit}>
+                    <StyledTextbox
+                        type="text"
+                        value={inputValue}
+                        onChange={(e) => setInputValue(e.target.value)}
+                        placeholder="Type an answer here"
+                    />
+                    <StyledSubmit type="submit" value="Submit" />
+                </StyledInputContainer>
+
+                <StyledHint>
+                    {getHintText(quizId)}
+                </StyledHint>
+
+                <StyledMessage $type={messageType}>
+                    {message}
+                </StyledMessage>
+
+                <StyledTableWrapper>
+                    <StyledTable>
+                        <tbody>
+                            {grid.map((row, rowIndex) => (
+                                <StyledTr key={`${quizId}-row-${rowIndex}`}>
+                                    {row.map((answer) => {
+                                        const isRevealed = revealedAnswers.includes(answer);
+
+                                        return (
+                                            <StyledTd key={answer} $revealed={isRevealed}>
+                                                {isRevealed ? answer : "\u00A0"}
+                                            </StyledTd>
+                                        );
+                                    })}
+                                </StyledTr>
+                            ))}
+                        </tbody>
+                    </StyledTable>
+                </StyledTableWrapper>
+
+                {answersRevealedAtEnd && (
+                    <>
+                        <br />
+                        <StyledHint>
+                            The unanswered entries were revealed so the user can still see the full quiz.
+                        </StyledHint>
+                    </>
+                )}
+            </StyledMain>
+
+            {showNameEntry && (
+                <NameEntryModal
+                    key={`${quizId}-${leaderboardRefreshKey}`}
+                    quizId={quizId}
+                    score={revealedAnswers.length}
+                    time={seconds}
+                    onClose={() => setShowNameEntry(false)}
+                    onSubmitted={handleSubmitted}
                 />
-                <StyledSubmit type="submit" value="Submit" />
-            </StyledInputContainer>
-
-            <StyledHint>
-                {getHintText(quizId)}
-            </StyledHint>
-
-            <StyledMessage $type={messageType}>
-                {message}
-            </StyledMessage>
-
-            <StyledTableWrapper>
-                <StyledTable>
-                    <tbody>
-                        {grid.map((row, rowIndex) => (
-                            <StyledTr key={`${quizId}-row-${rowIndex}`}>
-                                {row.map((answer) => {
-                                    const isRevealed = revealedAnswers.includes(answer);
-
-                                    return (
-                                        <StyledTd key={answer} $revealed={isRevealed}>
-                                            {isRevealed ? answer : "\u00A0"}
-                                        </StyledTd>
-                                    );
-                                })}
-                            </StyledTr>
-                        ))}
-                    </tbody>
-                </StyledTable>
-            </StyledTableWrapper>
-
-            {answersRevealedAtEnd && (
-                <>
-                    <br />
-                    <StyledHint>
-                        The unanswered entries were revealed so the user can still see the full quiz.
-                    </StyledHint>
-                </>
             )}
-        </StyledMain>
+        </>
     );
 }
